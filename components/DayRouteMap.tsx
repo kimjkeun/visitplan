@@ -46,20 +46,62 @@ export default function DayRouteMap({ schedule }: Props) {
             return;
         }
 
+        // 타임아웃 설정 (10초)
+        const loadingTimeout = setTimeout(() => {
+            if (isLoading) {
+                setError('지도 로딩 시간이 초과되었습니다. 페이지를 새로고침해주세요.');
+                setIsLoading(false);
+            }
+        }, 10000);
+
         // Google Maps API 스크립트 로드
         const loadGoogleMapsScript = () => {
+            // 이미 로드되어 있으면 바로 초기화
             if (window.google && window.google.maps) {
+                console.log('Google Maps already loaded');
                 initializeMap();
+                clearTimeout(loadingTimeout);
                 return;
             }
 
+            // 이미 스크립트 태그가 있는지 확인
+            const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+            if (existingScript) {
+                console.log('Google Maps script tag exists, waiting for load...');
+                // 스크립트가 로드될 때까지 대기
+                const checkInterval = setInterval(() => {
+                    if (window.google && window.google.maps) {
+                        clearInterval(checkInterval);
+                        clearTimeout(loadingTimeout);
+                        initializeMap();
+                    }
+                }, 100);
+
+                // 5초 후에도 로드 안되면 에러
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    if (!window.google || !window.google.maps) {
+                        setError('Google Maps 로딩에 실패했습니다. API 키를 확인해주세요.');
+                        setIsLoading(false);
+                    }
+                }, 5000);
+                return;
+            }
+
+            console.log('Loading Google Maps script...');
             const script = document.createElement('script');
             script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&language=ko`;
             script.async = true;
             script.defer = true;
-            script.onload = initializeMap;
-            script.onerror = () => {
-                setError('Google Maps를 로드하는 중 오류가 발생했습니다.');
+            script.onload = () => {
+                console.log('Google Maps script loaded successfully');
+                clearTimeout(loadingTimeout);
+                initializeMap();
+            };
+            script.onerror = (error) => {
+                console.error('Google Maps script loading error:', error);
+                clearTimeout(loadingTimeout);
+                setError('Google Maps를 로드하는 중 오류가 발생했습니다. API 키를 확인해주세요.');
                 setIsLoading(false);
             };
             document.head.appendChild(script);
@@ -200,7 +242,12 @@ export default function DayRouteMap({ schedule }: Props) {
         };
 
         loadGoogleMapsScript();
-    }, [schedule, showMap]);
+
+        // Cleanup function
+        return () => {
+            clearTimeout(loadingTimeout);
+        };
+    }, [schedule, showMap, isLoading]);
 
     // 위치 정보가 있는 아이템 개수 확인
     const locationCount = schedule.timeline.filter(item => item.location).length;
