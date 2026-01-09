@@ -8,7 +8,8 @@ import Navigation from '@/components/Navigation';
 import DaySchedule from '@/components/DaySchedule';
 import Checklist from '@/components/Checklist';
 import CurrencyConverter from '@/components/CurrencyConverter';
-import ExpenseTracker from '@/components/ExpenseTracker';
+import FullSchedule from '@/components/FullSchedule';
+import TravelInfo from '@/components/TravelInfo';
 
 export default function Home() {
   const { currentDay, initializeFromStorage } = useTourStore();
@@ -18,16 +19,20 @@ export default function Home() {
   }, [initializeFromStorage]);
 
   const renderContent = () => {
+    if (currentDay === 'overview') {
+      return <FullSchedule />;
+    }
+
+    if (currentDay === 'info') {
+      return <TravelInfo />;
+    }
+
     if (currentDay === 'checklist') {
       return <Checklist />;
     }
 
     if (currentDay === 'converter') {
       return <CurrencyConverter />;
-    }
-
-    if (currentDay === 'expenses') {
-      return <ExpenseTracker />;
     }
 
     const daySchedule = tourData.find((day) => day.id === currentDay);

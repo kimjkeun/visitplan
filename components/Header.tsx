@@ -59,7 +59,7 @@ export default function Header() {
     <header className="bg-gradient-to-r from-pink-500 to-rose-400 text-white p-8 rounded-3xl shadow-2xl mb-8">
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">
-          🌴 타이중 방학여행 🌴
+          타이중 방학여행
         </h1>
         <p className="text-md md:text-lg opacity-90 mt-2">
           📅 2026.01.12 (일) ~ 01.16 (목)
