@@ -40,7 +40,7 @@ export const useTourStore = create<TourStore>((set, get) => ({
   expenses: [],
   tripStartDate: null,
   currentDay: 'day1',
-  exchangeRate: 37.5, // Default TWD to KRW rate
+  exchangeRate: 47, // Default TWD to KRW rate
 
   // Checklist Actions
   toggleChecklistItem: (id) => {

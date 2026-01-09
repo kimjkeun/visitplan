@@ -1,32 +1,51 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTourStore } from '@/lib/store';
+
+// 여행 날짜 고정: 2026-01-12 ~ 2026-01-16
+const TRIP_START_DATE = '2026-01-12';
+const TRIP_END_DATE = '2026-01-16';
 
 export default function Header() {
-  const { tripStartDate, setTripStartDate } = useTourStore();
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const [isOnTrip, setIsOnTrip] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [tripEnded, setTripEnded] = useState(false);
 
   useEffect(() => {
-    if (!tripStartDate) return;
-
     const calculateDays = () => {
-      const start = new Date(tripStartDate);
+      const start = new Date(TRIP_START_DATE);
+      const end = new Date(TRIP_END_DATE);
       const now = new Date();
-      const diff = start.getTime() - now.getTime();
-      const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
 
-      if (days < 0 && days > -5) {
-        setIsOnTrip(true);
-        setDaysRemaining(Math.abs(days) + 1);
-      } else if (days >= 0) {
-        setIsOnTrip(false);
-        setDaysRemaining(days);
-      } else {
+      // 시간 부분 제거 (날짜만 비교)
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      now.setHours(0, 0, 0, 0);
+
+      const diffToStart = start.getTime() - now.getTime();
+      const daysToStart = Math.ceil(diffToStart / (1000 * 60 * 60 * 24));
+
+      // 여행 종료 확인
+      if (now.getTime() > end.getTime()) {
+        setTripEnded(true);
         setIsOnTrip(false);
         setDaysRemaining(null);
+        return;
+      }
+
+      // 여행 중 (1일차 ~ 5일차)
+      if (now.getTime() >= start.getTime() && now.getTime() <= end.getTime()) {
+        setIsOnTrip(true);
+        const diffFromStart = now.getTime() - start.getTime();
+        const currentDay = Math.floor(diffFromStart / (1000 * 60 * 60 * 24)) + 1;
+        setDaysRemaining(currentDay);
+        setTripEnded(false);
+      }
+      // 여행 전
+      else if (daysToStart >= 0) {
+        setIsOnTrip(false);
+        setDaysRemaining(daysToStart);
+        setTripEnded(false);
       }
     };
 
@@ -34,42 +53,28 @@ export default function Header() {
     const interval = setInterval(calculateDays, 1000 * 60 * 60); // Update every hour
 
     return () => clearInterval(interval);
-  }, [tripStartDate]);
+  }, []);
 
   return (
     <header className="bg-gradient-to-r from-pink-500 to-rose-400 text-white p-8 rounded-3xl shadow-2xl mb-8">
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">
-          🌴 대만 타이중 4박 5일 여행 🌴
+          🌴 타이중 방학여행 🌴
         </h1>
-        <p className="text-lg md:text-xl opacity-95">커플 여행 완벽 가이드</p>
+        <p className="text-md md:text-lg opacity-90 mt-2">
+          📅 2026.01.12 (일) ~ 01.16 (목)
+        </p>
 
         {/* D-Day Counter */}
         <div className="mt-6">
-          {!tripStartDate && (
-            <button
-              onClick={() => setShowDatePicker(!showDatePicker)}
-              className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full transition-all backdrop-blur-sm"
-            >
-              📅 여행 시작일 설정하기
-            </button>
-          )}
-
-          {showDatePicker && (
-            <div className="mt-4 inline-block bg-white/90 p-4 rounded-2xl backdrop-blur-sm">
-              <input
-                type="date"
-                className="px-4 py-2 rounded-lg text-gray-800 font-medium"
-                onChange={(e) => {
-                  setTripStartDate(e.target.value);
-                  setShowDatePicker(false);
-                }}
-              />
+          {tripEnded ? (
+            <div className="bg-white/20 backdrop-blur-sm px-8 py-4 rounded-full inline-block">
+              <div className="text-2xl font-bold">
+                💝 즐거운 추억이 되셨길! 💝
+              </div>
             </div>
-          )}
-
-          {tripStartDate && daysRemaining !== null && (
-            <div className="bg-white/20 backdrop-blur-sm px-8 py-4 rounded-full inline-block mt-4">
+          ) : daysRemaining !== null && (
+            <div className="bg-white/20 backdrop-blur-sm px-8 py-4 rounded-full inline-block">
               {isOnTrip ? (
                 <div className="text-2xl font-bold">
                   🎉 여행 {daysRemaining}일차 진행 중! 🎉
@@ -82,18 +87,6 @@ export default function Header() {
                 </div>
               )}
             </div>
-          )}
-
-          {tripStartDate && (
-            <button
-              onClick={() => {
-                setTripStartDate(null);
-                setShowDatePicker(false);
-              }}
-              className="ml-4 text-sm opacity-75 hover:opacity-100 underline"
-            >
-              날짜 재설정
-            </button>
           )}
         </div>
       </div>

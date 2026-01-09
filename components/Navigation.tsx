@@ -9,7 +9,6 @@ const days = [
   { id: 'day4', label: 'Day 4' },
   { id: 'day5', label: 'Day 5' },
   { id: 'checklist', label: '체크리스트' },
-  { id: 'expenses', label: '경비 추적' },
   { id: 'converter', label: '환율' },
 ];
 
@@ -25,10 +24,9 @@ export default function Navigation() {
             onClick={() => setCurrentDay(day.id)}
             className={`
               px-5 py-2.5 rounded-xl font-bold transition-all
-              ${
-                currentDay === day.id
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white shadow-md transform scale-105'
-                  : 'bg-gray-100 text-pink-500 hover:bg-pink-50 hover:shadow-md'
+              ${currentDay === day.id
+                ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white shadow-md transform scale-105'
+                : 'bg-gray-100 text-pink-500 hover:bg-pink-50 hover:shadow-md'
               }
             `}
           >

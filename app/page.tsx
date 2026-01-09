@@ -40,17 +40,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-100 via-pink-50 to-teal-50">
-      <div className="max-w-7xl mx-auto p-4 md:p-8">
+      <div className="max-w-full mx-auto p-2 sm:p-4 md:p-6 lg:max-w-6xl">
         <Header />
         <Navigation />
         <main>{renderContent()}</main>
 
         {/* Footer */}
-        <footer className="text-center p-8 mt-12 bg-white rounded-3xl shadow-lg">
-          <h3 className="text-2xl font-bold text-pink-600 mb-2">
+        <footer className="text-center p-6 mt-12 bg-white rounded-3xl shadow-lg">
+          <h3 className="text-xl md:text-2xl font-bold text-pink-600 mb-2">
             🎉 즐거운 대만 여행 되세요! 🎉
           </h3>
-          <p className="text-gray-600">Made with ❤️ for your perfect trip</p>
+          <p className="text-sm md:text-base text-gray-600">Made with ❤️ for your perfect trip</p>
         </footer>
       </div>
     </div>
