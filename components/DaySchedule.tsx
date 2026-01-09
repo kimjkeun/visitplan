@@ -3,6 +3,7 @@
 import { DaySchedule as DayScheduleType } from '@/types';
 import TimelineItem from './TimelineItem';
 import FlightInfo from './FlightInfo';
+import DayRouteMap from './DayRouteMap';
 
 interface Props {
   schedule: DayScheduleType;
@@ -24,6 +25,9 @@ export default function DaySchedule({ schedule }: Props) {
 
       {/* Flight Info */}
       {schedule.flight && <FlightInfo flight={schedule.flight} />}
+
+      {/* Day Route Map */}
+      <DayRouteMap schedule={schedule} />
 
       {/* Timeline */}
       <div className="space-y-6">
