@@ -10,6 +10,7 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   /* config options here */
+  turbopack: {}, // Silence Turbopack warning for webpack-based PWA plugin
 };
 
 export default withPWA(nextConfig);
