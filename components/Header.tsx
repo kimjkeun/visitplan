@@ -56,33 +56,47 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-gradient-to-r from-pink-500 to-rose-400 text-white p-8 rounded-3xl shadow-2xl mb-8">
-      <div className="text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">
+    <header className="relative bg-gray-800 text-white p-8 rounded-3xl shadow-2xl mb-8 overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(/taiwan-header.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+
+      {/* Dark Overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/40 to-black/50" />
+
+      {/* Content */}
+      <div className="relative z-10 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-2xl">
           타이중 방학여행
         </h1>
-        <p className="text-md md:text-lg opacity-90 mt-2">
+        <p className="text-md md:text-lg opacity-95 mt-2 drop-shadow-lg">
           📅 2026.01.12 (일) ~ 01.16 (목)
         </p>
 
         {/* D-Day Counter */}
         <div className="mt-6">
           {tripEnded ? (
-            <div className="bg-white/20 backdrop-blur-sm px-8 py-4 rounded-full inline-block">
-              <div className="text-2xl font-bold">
+            <div className="bg-white/25 backdrop-blur-md px-8 py-4 rounded-full inline-block border border-white/30">
+              <div className="text-2xl font-bold drop-shadow-lg">
                 💝 즐거운 추억이 되셨길! 💝
               </div>
             </div>
           ) : daysRemaining !== null && (
-            <div className="bg-white/20 backdrop-blur-sm px-8 py-4 rounded-full inline-block">
+            <div className="bg-white/25 backdrop-blur-md px-8 py-4 rounded-full inline-block border border-white/30">
               {isOnTrip ? (
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-bold drop-shadow-lg">
                   🎉 여행 {daysRemaining}일차 진행 중! 🎉
                 </div>
               ) : daysRemaining === 0 ? (
-                <div className="text-2xl font-bold">🎊 오늘 출발! 🎊</div>
+                <div className="text-2xl font-bold drop-shadow-lg">🎊 오늘 출발! 🎊</div>
               ) : (
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-bold drop-shadow-lg">
                   D-{daysRemaining} ✈️
                 </div>
               )}

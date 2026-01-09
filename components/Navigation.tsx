@@ -51,8 +51,8 @@ export default function Navigation() {
                   className={`
                     px-4 py-2 rounded-xl font-bold transition-all text-sm
                     ${currentDay === item.id
-                      ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white shadow-md transform scale-105'
-                      : 'bg-gray-100 text-pink-500 hover:bg-pink-50 hover:shadow-md'
+                      ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-md transform scale-105'
+                      : 'bg-gray-100 text-teal-600 hover:bg-teal-50 hover:shadow-md'
                     }
                   `}
                 >

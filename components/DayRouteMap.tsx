@@ -151,18 +151,23 @@ export default function DayRouteMap({ schedule }: Props) {
                     stopover: true,
                 }));
 
-                // Directions API 요청
-                directionsService.route(
-                    {
+                // Directions API 요청 (TRANSIT 시도 후 실패하면 DRIVING으로 재시도)
+                const requestDirections = (travelMode: any) => {
+                    const request: any = {
                         origin: origin,
                         destination: destination,
                         waypoints: waypoints,
-                        travelMode: google.maps.TravelMode.TRANSIT, // 대중교통 모드
-                        transitOptions: {
+                        travelMode: travelMode,
+                    };
+
+                    // TRANSIT 모드일 때만 transitOptions 추가
+                    if (travelMode === google.maps.TravelMode.TRANSIT) {
+                        request.transitOptions = {
                             modes: ['BUS', 'RAIL', 'SUBWAY'],
-                        },
-                    },
-                    (result: any, status: any) => {
+                        };
+                    }
+
+                    directionsService.route(request, (result: any, status: any) => {
                         if (status === 'OK') {
                             directionsRenderer.setDirections(result);
 
@@ -203,37 +208,46 @@ export default function DayRouteMap({ schedule }: Props) {
 
                             setIsLoading(false);
                         } else {
-                            // Directions API 실패 시 단순 마커만 표시
-                            console.warn('Directions request failed:', status);
+                            // TRANSIT 실패 시 DRIVING으로 재시도
+                            if (travelMode === google.maps.TravelMode.TRANSIT) {
+                                console.warn('TRANSIT mode failed, trying DRIVING mode:', status);
+                                requestDirections(google.maps.TravelMode.DRIVING);
+                            } else {
+                                // DRIVING도 실패하면 마커만 표시
+                                console.warn('Directions request failed:', status);
 
-                            locationsWithTime.forEach((loc, index) => {
-                                const marker = new google.maps.Marker({
-                                    position: { lat: loc.location.lat, lng: loc.location.lng },
-                                    map: map,
-                                    label: `${index + 1}`,
-                                    title: loc.location.name,
-                                });
+                                locationsWithTime.forEach((loc, index) => {
+                                    const marker = new google.maps.Marker({
+                                        position: { lat: loc.location.lat, lng: loc.location.lng },
+                                        map: map,
+                                        label: `${index + 1}`,
+                                        title: loc.location.name,
+                                    });
 
-                                const infoWindow = new google.maps.InfoWindow({
-                                    content: `
+                                    const infoWindow = new google.maps.InfoWindow({
+                                        content: `
                     <div style="padding: 8px;">
                       <h3 style="margin: 0 0 4px 0; font-weight: bold;">${index + 1}. ${loc.title}</h3>
                       <p style="margin: 0; font-size: 12px;">${loc.time}</p>
                       <p style="margin: 4px 0 0 0;">${loc.location.name}</p>
                     </div>
                   `,
+                                    });
+
+                                    marker.addListener('click', () => {
+                                        infoWindow.open(map, marker);
+                                    });
                                 });
 
-                                marker.addListener('click', () => {
-                                    infoWindow.open(map, marker);
-                                });
-                            });
-
-                            setError('경로를 표시할 수 없어 마커만 표시합니다.');
-                            setIsLoading(false);
+                                setError('경로를 표시할 수 없어 마커만 표시합니다.');
+                                setIsLoading(false);
+                            }
                         }
-                    }
-                );
+                    });
+                };
+
+                // TRANSIT 모드로 먼저 시도
+                requestDirections(google.maps.TravelMode.TRANSIT);
             } catch (err) {
                 console.error('Map initialization error:', err);
                 setError('지도를 초기화하는 중 오류가 발생했습니다.');
