@@ -1,0 +1,11 @@
+{
+  "name": "대만 타이중 4박 5일 여행 가이드",
+  "short_name": "타이중 여행",
+  "description": "타이중 커플 여행 완벽 가이드 - 오프라인에서도 사용 가능",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ec4899",
+  "orientation": "portrait-primary",
+  "icons": []
+}
