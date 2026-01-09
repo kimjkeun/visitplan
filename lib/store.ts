@@ -25,7 +25,7 @@ interface TourStore {
   deleteExpense: (id: string) => void;
 
   // Actions - Trip
-  setTripStartDate: (date: string) => void;
+  setTripStartDate: (date: string | null) => void;
   setCurrentDay: (dayId: string) => void;
   setExchangeRate: (rate: number) => void;
 
