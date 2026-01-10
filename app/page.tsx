@@ -59,14 +59,6 @@ export default function Home() {
         <Header />
         <Navigation />
         <main>{renderContent()}</main>
-
-        {/* Footer */}
-        <footer className="text-center p-6 mt-12 bg-white rounded-3xl shadow-lg">
-          <h3 className="text-xl md:text-2xl font-bold text-pink-600 mb-2">
-            🎉 즐거운 대만 여행 되세요! 🎉
-          </h3>
-          <p className="text-sm md:text-base text-gray-600">Made with ❤️ for your perfect trip</p>
-        </footer>
       </div>
     </div>
   );
