@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { sendMessageToGemini } from '@/lib/gemini';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import LiveTranslator from './LiveTranslator';
+import { FaMicrophone } from 'react-icons/fa';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -21,6 +23,7 @@ export default function TravelAssistant() {
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showLive, setShowLive] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -86,9 +89,21 @@ export default function TravelAssistant() {
     return (
         <div className="flex flex-col h-[calc(100vh-120px)] sm:h-[calc(100vh-140px)]">
             {/* 헤더 */}
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 sm:p-6 rounded-t-3xl shadow-xl">
-                <h2 className="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">🤖 AI 여행 어시스턴트</h2>
-                <p className="text-base sm:text-xl opacity-90">타이중 여행에 대해 무엇이든 물어보세요</p>
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 sm:p-6 rounded-t-3xl shadow-xl flex justify-between items-start">
+                <div>
+                    <h2 className="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">🤖 AI 여행 어시스턴트</h2>
+                    <p className="text-base sm:text-xl opacity-90">타이중 여행에 대해 무엇이든 물어보세요</p>
+                </div>
+                <button
+                    onClick={() => setShowLive(true)}
+                    className="flex flex-col items-center justify-center bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95 shadow-lg group"
+                >
+                    <div className="relative">
+                        <FaMicrophone className="text-xl sm:text-2xl mb-1 group-hover:text-yellow-300 transition-colors" />
+                        <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></div>
+                    </div>
+                    <span className="text-[10px] sm:text-xs font-bold whitespace-nowrap bg-black/20 px-1.5 py-0.5 rounded-full">LIVE 통역</span>
+                </button>
             </div>
 
             {/* 메시지 영역 */}
@@ -100,8 +115,8 @@ export default function TravelAssistant() {
                     >
                         <div
                             className={`max-w-[85%] sm:max-w-[80%] rounded-2xl p-3 sm:p-4 shadow-md ${message.role === 'user'
-                                    ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white'
-                                    : 'bg-white text-gray-800 border-l-4 border-purple-500'
+                                ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white'
+                                : 'bg-white text-gray-800 border-l-4 border-purple-500'
                                 }`}
                         >
                             <div className="leading-relaxed">
@@ -190,8 +205,8 @@ export default function TravelAssistant() {
                         onClick={handleSend}
                         disabled={!input.trim() || isLoading}
                         className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold transition-all text-base sm:text-lg ${!input.trim() || isLoading
-                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:shadow-lg hover:scale-105'
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:shadow-lg hover:scale-105'
                             }`}
                     >
                         {isLoading ? '⏳' : '전송'}
@@ -201,6 +216,8 @@ export default function TravelAssistant() {
                     ⚠️ AI가 생성한 답변은 참고용입니다.
                 </p>
             </div>
+
+            {showLive && <LiveTranslator onClose={() => setShowLive(false)} />}
         </div>
     );
 }
