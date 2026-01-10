@@ -87,8 +87,8 @@ export default function TravelAssistant() {
         <div className="flex flex-col h-[calc(100vh-120px)] sm:h-[calc(100vh-140px)]">
             {/* 헤더 */}
             <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 sm:p-6 rounded-t-3xl shadow-xl">
-                <h2 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">🤖 AI 여행 어시스턴트</h2>
-                <p className="text-sm sm:text-lg opacity-90">타이중 여행에 대해 무엇이든 물어보세요</p>
+                <h2 className="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">🤖 AI 여행 어시스턴트</h2>
+                <p className="text-base sm:text-xl opacity-90">타이중 여행에 대해 무엇이든 물어보세요</p>
             </div>
 
             {/* 메시지 영역 */}
@@ -106,29 +106,29 @@ export default function TravelAssistant() {
                         >
                             <div className="leading-relaxed">
                                 {message.role === 'user' ? (
-                                    <p className="whitespace-pre-wrap text-white text-xs sm:text-sm">{message.parts}</p>
+                                    <p className="whitespace-pre-wrap text-white text-sm sm:text-base">{message.parts}</p>
                                 ) : (
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
                                         components={{
-                                            h1: ({ children }) => <h1 className="text-lg sm:text-2xl font-bold text-gray-800 mt-3 sm:mt-4 mb-1.5 sm:mb-2">{children}</h1>,
-                                            h2: ({ children }) => <h2 className="text-base sm:text-xl font-bold text-gray-800 mt-2 sm:mt-3 mb-1 sm:mb-2">{children}</h2>,
-                                            h3: ({ children }) => <h3 className="text-sm sm:text-lg font-bold text-gray-800 mt-1.5 sm:mt-2 mb-1">{children}</h3>,
-                                            p: ({ children }) => <p className="text-gray-800 mb-1.5 sm:mb-2 text-xs sm:text-sm">{children}</p>,
+                                            h1: ({ children }) => <h1 className="text-xl sm:text-3xl font-bold text-gray-800 mt-3 sm:mt-4 mb-1.5 sm:mb-2">{children}</h1>,
+                                            h2: ({ children }) => <h2 className="text-lg sm:text-2xl font-bold text-gray-800 mt-2 sm:mt-3 mb-1 sm:mb-2">{children}</h2>,
+                                            h3: ({ children }) => <h3 className="text-base sm:text-xl font-bold text-gray-800 mt-1.5 sm:mt-2 mb-1">{children}</h3>,
+                                            p: ({ children }) => <p className="text-gray-800 mb-1.5 sm:mb-2 text-sm sm:text-base">{children}</p>,
                                             strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
-                                            ul: ({ children }) => <ul className="list-disc list-inside mb-1.5 sm:mb-2 space-y-0.5 sm:space-y-1 text-xs sm:text-sm">{children}</ul>,
-                                            ol: ({ children }) => <ol className="list-decimal list-inside mb-1.5 sm:mb-2 space-y-0.5 sm:space-y-1 text-xs sm:text-sm">{children}</ol>,
+                                            ul: ({ children }) => <ul className="list-disc list-inside mb-1.5 sm:mb-2 space-y-0.5 sm:space-y-1 text-sm sm:text-base">{children}</ul>,
+                                            ol: ({ children }) => <ol className="list-decimal list-inside mb-1.5 sm:mb-2 space-y-0.5 sm:space-y-1 text-sm sm:text-base">{children}</ol>,
                                             li: ({ children }) => <li className="text-gray-800">{children}</li>,
-                                            code: ({ children }) => <code className="text-purple-600 bg-purple-50 px-1 rounded text-xs sm:text-sm">{children}</code>,
-                                            pre: ({ children }) => <pre className="bg-gray-100 p-1.5 sm:p-2 rounded mb-1.5 sm:mb-2 overflow-x-auto text-xs sm:text-sm">{children}</pre>,
-                                            a: ({ children, href }) => <a href={href} className="text-purple-600 hover:text-purple-700 underline text-xs sm:text-sm" target="_blank" rel="noopener noreferrer">{children}</a>,
+                                            code: ({ children }) => <code className="text-purple-600 bg-purple-50 px-1 rounded text-sm sm:text-base">{children}</code>,
+                                            pre: ({ children }) => <pre className="bg-gray-100 p-1.5 sm:p-2 rounded mb-1.5 sm:mb-2 overflow-x-auto text-sm sm:text-base">{children}</pre>,
+                                            a: ({ children, href }) => <a href={href} className="text-purple-600 hover:text-purple-700 underline text-sm sm:text-base" target="_blank" rel="noopener noreferrer">{children}</a>,
                                         }}
                                     >
                                         {message.parts}
                                     </ReactMarkdown>
                                 )}
                             </div>
-                            <p className={`text-[10px] sm:text-xs mt-1.5 sm:mt-2 ${message.role === 'user' ? 'text-purple-100' : 'text-gray-400'}`}>
+                            <p className={`text-xs sm:text-sm mt-1.5 sm:mt-2 ${message.role === 'user' ? 'text-purple-100' : 'text-gray-400'}`}>
                                 {new Date(message.timestamp).toLocaleTimeString('ko-KR', {
                                     hour: '2-digit',
                                     minute: '2-digit'
@@ -147,7 +147,7 @@ export default function TravelAssistant() {
                                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                                 </div>
-                                <span className="text-xs sm:text-sm text-gray-600">답변 생성 중...</span>
+                                <span className="text-sm sm:text-base text-gray-600">답변 생성 중...</span>
                             </div>
                         </div>
                     </div>
@@ -159,13 +159,13 @@ export default function TravelAssistant() {
             {/* 추천 질문 (메시지가 적을 때만 표시) */}
             {messages.length <= 2 && (
                 <div className="p-2 sm:p-4 bg-white border-t">
-                    <p className="text-xs sm:text-sm text-gray-600 mb-2">💡 추천 질문:</p>
+                    <p className="text-sm sm:text-base text-gray-600 mb-2">💡 추천 질문:</p>
                     <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {suggestedQuestions.map((question, index) => (
                             <button
                                 key={index}
                                 onClick={() => setInput(question)}
-                                className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm bg-purple-50 text-purple-700 rounded-full hover:bg-purple-100 transition-colors"
+                                className="px-2 sm:px-3 py-1 sm:py-1.5 text-sm sm:text-base bg-purple-50 text-purple-700 rounded-full hover:bg-purple-100 transition-colors"
                             >
                                 {question}
                             </button>
@@ -182,14 +182,14 @@ export default function TravelAssistant() {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder="질문을 입력하세요..."
-                        className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-purple-200 rounded-xl focus:outline-none focus:border-purple-500 resize-none text-sm sm:text-base"
+                        className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-purple-200 rounded-xl focus:outline-none focus:border-purple-500 resize-none text-base sm:text-lg"
                         rows={1}
                         disabled={isLoading}
                     />
                     <button
                         onClick={handleSend}
                         disabled={!input.trim() || isLoading}
-                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold transition-all text-sm sm:text-base ${!input.trim() || isLoading
+                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold transition-all text-base sm:text-lg ${!input.trim() || isLoading
                                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                 : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:shadow-lg hover:scale-105'
                             }`}
@@ -197,7 +197,7 @@ export default function TravelAssistant() {
                         {isLoading ? '⏳' : '전송'}
                     </button>
                 </div>
-                <p className="text-[10px] sm:text-xs text-gray-500 mt-1 sm:mt-2">
+                <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
                     ⚠️ AI가 생성한 답변은 참고용입니다.
                 </p>
             </div>
