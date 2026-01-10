@@ -12,6 +12,7 @@ interface Props {
 
 export default function TimelineItem({ item, dayId, index }: Props) {
   const [showMap, setShowMap] = useState(false);
+  const [showPlaceGuide, setShowPlaceGuide] = useState(false);
 
 
 
@@ -76,65 +77,80 @@ export default function TimelineItem({ item, dayId, index }: Props) {
         </div>
       )}
 
-      {/* Place Details Section (Guidebook Style) */}
+      {/* Place Details Section (Guidebook Style) - Collapsible */}
       {item.placeInfo && (
-        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border-l-4 border-purple-500 p-4 rounded-lg mb-3">
-          <div className="flex items-center justify-between mb-3">
+        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border-l-4 border-purple-500 rounded-lg overflow-hidden">
+          {/* Header with Toggle Button */}
+          <button
+            onClick={() => setShowPlaceGuide(!showPlaceGuide)}
+            className="w-full p-4 flex items-center justify-between hover:bg-purple-100 transition-colors"
+          >
             <h4 className="font-bold text-purple-800 flex items-center gap-2">
               <span>📖</span>
               <span>장소 가이드</span>
             </h4>
-          </div>
+            <span className="text-purple-600 text-xl">
+              {showPlaceGuide ? '▲' : '▼'}
+            </span>
+          </button>
 
-          {/* Description */}
-          {item.placeInfo.description && (
-            <div className="mb-3">
-              <p className="text-gray-700 text-sm leading-relaxed">{item.placeInfo.description}</p>
-            </div>
-          )}
+          {/* Collapsible Content */}
+          {showPlaceGuide && (
+            <div className="px-4 pb-4 space-y-3 animate-fadeIn">
+              {/* Description */}
+              {item.placeInfo.description && (
+                <div className="bg-white/50 p-3 rounded-lg">
+                  <p className="text-gray-700 text-sm leading-relaxed">{item.placeInfo.description}</p>
+                </div>
+              )}
 
-          {/* Highlights */}
-          {item.placeInfo.highlights && item.placeInfo.highlights.length > 0 && (
-            <div className="mb-3">
-              <p className="font-semibold text-purple-700 text-sm mb-1">✨ 주요 볼거리</p>
-              <ul className="space-y-1">
-                {item.placeInfo.highlights.map((highlight, idx) => (
-                  <li key={idx} className="text-gray-700 text-sm flex items-start gap-2">
-                    <span className="text-purple-500 mt-0.5">•</span>
-                    <span>{highlight}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+              {/* Highlights */}
+              {item.placeInfo.highlights && item.placeInfo.highlights.length > 0 && (
+                <div className="bg-white/50 p-3 rounded-lg">
+                  <p className="font-semibold text-purple-700 text-sm mb-2">✨ 주요 볼거리</p>
+                  <ul className="space-y-1.5">
+                    {item.placeInfo.highlights.map((highlight, idx) => (
+                      <li key={idx} className="text-gray-700 text-sm flex items-start gap-2">
+                        <span className="text-purple-500 mt-0.5">•</span>
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-          {/* Operating Hours */}
-          {item.placeInfo.hours && (
-            <div className="mb-2">
-              <p className="text-sm">
-                <span className="font-semibold text-purple-700">🕐 운영시간:</span>
-                <span className="text-gray-700 ml-2">{item.placeInfo.hours}</span>
-              </p>
-            </div>
-          )}
+              {/* Info Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {/* Operating Hours */}
+                {item.placeInfo.hours && (
+                  <div className="bg-white/50 p-3 rounded-lg">
+                    <p className="text-sm">
+                      <span className="font-semibold text-purple-700 block mb-1">🕐 운영시간</span>
+                      <span className="text-gray-700">{item.placeInfo.hours}</span>
+                    </p>
+                  </div>
+                )}
 
-          {/* Admission Fee */}
-          {item.placeInfo.admission && (
-            <div className="mb-2">
-              <p className="text-sm">
-                <span className="font-semibold text-purple-700">💰 입장료:</span>
-                <span className="text-gray-700 ml-2">{item.placeInfo.admission}</span>
-              </p>
-            </div>
-          )}
+                {/* Admission Fee */}
+                {item.placeInfo.admission && (
+                  <div className="bg-white/50 p-3 rounded-lg">
+                    <p className="text-sm">
+                      <span className="font-semibold text-purple-700 block mb-1">💰 입장료</span>
+                      <span className="text-gray-700">{item.placeInfo.admission}</span>
+                    </p>
+                  </div>
+                )}
+              </div>
 
-          {/* Recommendations */}
-          {item.placeInfo.recommendations && (
-            <div className="mt-3 pt-3 border-t border-purple-200">
-              <p className="text-sm text-purple-800">
-                <span className="font-semibold">💡 추천:</span>
-                <span className="ml-2">{item.placeInfo.recommendations}</span>
-              </p>
+              {/* Recommendations */}
+              {item.placeInfo.recommendations && (
+                <div className="bg-purple-100 p-3 rounded-lg border border-purple-200">
+                  <p className="text-sm text-purple-900">
+                    <span className="font-semibold block mb-1">💡 여행 꿀팁</span>
+                    <span>{item.placeInfo.recommendations}</span>
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
