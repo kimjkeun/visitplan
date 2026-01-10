@@ -3,6 +3,8 @@ export const STORAGE_KEYS = {
   NOTES: 'taiwan-tour-notes',
   EXPENSES: 'taiwan-tour-expenses',
   TRIP_START_DATE: 'taiwan-tour-start-date',
+  EXCHANGE_RATE: 'taiwan-tour-exchange-rate',
+  FAVORITE_PHRASES: 'taiwan-tour-favorite-phrases',
 } as const;
 
 export function getFromStorage<T>(key: string, defaultValue: T): T {

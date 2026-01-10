@@ -11,6 +11,7 @@ interface TourStore {
   tripStartDate: string | null;
   currentDay: string;
   exchangeRate: number; // TWD to KRW
+  favoritePhrases: string[]; // Travel phrase IDs
 
   // Actions - Checklist
   toggleChecklistItem: (id: string) => void;
@@ -29,6 +30,9 @@ interface TourStore {
   setCurrentDay: (dayId: string) => void;
   setExchangeRate: (rate: number) => void;
 
+  // Actions - Phrases
+  toggleFavoritePhrase: (phraseId: string) => void;
+
   // Actions - Init
   initializeFromStorage: () => void;
 }
@@ -41,6 +45,7 @@ export const useTourStore = create<TourStore>((set, get) => ({
   tripStartDate: null,
   currentDay: 'overview',
   exchangeRate: 47, // Default TWD to KRW rate
+  favoritePhrases: [],
 
   // Checklist Actions
   toggleChecklistItem: (id) => {
@@ -109,12 +114,24 @@ export const useTourStore = create<TourStore>((set, get) => ({
     saveToStorage(STORAGE_KEYS.TRIP_START_DATE, date);
   },
 
+  setExchangeRate: (rate) => {
+    set({ exchangeRate: rate });
+    saveToStorage(STORAGE_KEYS.EXCHANGE_RATE, rate);
+  },
+
   setCurrentDay: (dayId) => {
     set({ currentDay: dayId });
   },
 
-  setExchangeRate: (rate) => {
-    set({ exchangeRate: rate });
+  // Phrase Actions
+  toggleFavoritePhrase: (phraseId) => {
+    set((state) => {
+      const newFavorites = state.favoritePhrases.includes(phraseId)
+        ? state.favoritePhrases.filter(id => id !== phraseId)
+        : [...state.favoritePhrases, phraseId];
+      saveToStorage(STORAGE_KEYS.FAVORITE_PHRASES, newFavorites);
+      return { favoritePhrases: newFavorites };
+    });
   },
 
   // Initialize from localStorage
@@ -124,8 +141,10 @@ export const useTourStore = create<TourStore>((set, get) => ({
       const notes = getFromStorage<UserNote[]>(STORAGE_KEYS.NOTES, []);
       const expenses = getFromStorage<TripExpense[]>(STORAGE_KEYS.EXPENSES, []);
       const tripStartDate = getFromStorage<string | null>(STORAGE_KEYS.TRIP_START_DATE, null);
+      const exchangeRate = getFromStorage<number>(STORAGE_KEYS.EXCHANGE_RATE, 47);
+      const favoritePhrases = getFromStorage<string[]>(STORAGE_KEYS.FAVORITE_PHRASES, []);
 
-      set({ checklist, notes, expenses, tripStartDate });
+      set({ checklist, notes, expenses, tripStartDate, exchangeRate, favoritePhrases });
     }
   },
 }));

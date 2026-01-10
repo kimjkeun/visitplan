@@ -23,6 +23,7 @@ const navigationSections = [
     title: '유틸',
     items: [
       { id: 'info', label: '여행정보' },
+      { id: 'phrases', label: '여행회화' },
       { id: 'converter', label: '환율' },
       { id: 'checklist', label: '체크리스트' },
     ]
