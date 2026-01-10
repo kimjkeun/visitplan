@@ -60,11 +60,19 @@ export const sendMessageToGemini = async (message: string, history: Array<{ role
             systemInstruction: getTravelContext()
         });
 
-        // 대화 히스토리 포맷 변환
-        const formattedHistory = history.map(msg => ({
-            role: msg.role === 'assistant' ? 'model' : 'user',
-            parts: [{ text: msg.parts }]
-        }));
+        // 대화 히스토리 포맷 변환 및 검증
+        const formattedHistory = history
+            .map(msg => ({
+                role: msg.role === 'assistant' ? 'model' : 'user',
+                parts: [{ text: msg.parts }]
+            }))
+            .filter((msg, index, arr) => {
+                // 첫 번째 메시지는 반드시 user여야 함
+                if (index === 0 && msg.role !== 'user') return false;
+                // 연속된 같은 role 제거 (user-user 또는 model-model 방지)
+                if (index > 0 && arr[index - 1].role === msg.role) return false;
+                return true;
+            });
 
         const chat = model.startChat({
             history: formattedHistory
