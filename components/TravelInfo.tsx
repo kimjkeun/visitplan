@@ -35,6 +35,34 @@ export default function TravelInfo() {
                 </div>
             </div>
 
+            {/* 숙소 정보 */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-purple-500">
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span>🏨</span>
+                    숙소 정보
+                </h3>
+                <div className="bg-purple-50 p-5 rounded-lg">
+                    <h4 className="text-lg font-bold text-purple-800 mb-3">인하우스 호텔 그랜드</h4>
+                    <div className="space-y-2 text-sm">
+                        <p className="text-gray-700">
+                            <span className="font-medium text-gray-800">중국어명:</span> 薆悅酒店五權館
+                        </p>
+                        <p className="text-gray-700">
+                            <span className="font-medium text-gray-800">주소:</span><br />
+                            No. 228號, Wuquan Rd, North District, Taichung City, 대만 40443
+                        </p>
+                        <a
+                            href="https://www.google.com/maps/search/?api=1&query=薆悅酒店五權館+No.+228號+Wuquan+Rd+North+District+Taichung+City"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                        >
+                            📍 지도에서 보기
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             {/* 교통 정보 */}
             <div className="bg-white rounded-2xl p-6 shadow-lg">
                 <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">

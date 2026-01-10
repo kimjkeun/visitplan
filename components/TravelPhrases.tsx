@@ -22,20 +22,45 @@ export default function TravelPhrases() {
 
             setPlayingId(phrase.id);
 
-            const utterance = new SpeechSynthesisUtterance(phrase.chinese);
-            utterance.lang = 'zh-TW'; // 대만 중국어
-            utterance.rate = 0.8; // 조금 천천히
+            const speak = () => {
+                const utterance = new SpeechSynthesisUtterance(phrase.chinese);
+                utterance.lang = 'zh-TW'; // 대만 중국어
+                utterance.rate = 0.8; // 조금 천천히
 
-            utterance.onend = () => {
-                setPlayingId(null);
+                // 중국어 음성 명시적으로 선택 (모바일 호환성)
+                const voices = window.speechSynthesis.getVoices();
+                const chineseVoice = voices.find(voice =>
+                    voice.lang.includes('zh-TW') ||
+                    voice.lang.includes('zh-CN') ||
+                    voice.lang.includes('zh')
+                );
+
+                if (chineseVoice) {
+                    utterance.voice = chineseVoice;
+                    console.log('Using voice:', chineseVoice.name, chineseVoice.lang);
+                } else {
+                    console.warn('No Chinese voice found, using default');
+                }
+
+                utterance.onend = () => {
+                    setPlayingId(null);
+                };
+
+                utterance.onerror = () => {
+                    setPlayingId(null);
+                    alert('음성 재생을 지원하지 않는 브라우저입니다.');
+                };
+
+                window.speechSynthesis.speak(utterance);
             };
 
-            utterance.onerror = () => {
-                setPlayingId(null);
-                alert('음성 재생을 지원하지 않는 브라우저입니다.');
-            };
-
-            window.speechSynthesis.speak(utterance);
+            // 음성 목록이 로드되지 않았을 경우를 대비 (모바일)
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                window.speechSynthesis.addEventListener('voiceschanged', speak, { once: true });
+            } else {
+                speak();
+            }
         } else {
             alert('이 브라우저는 음성 재생을 지원하지 않습니다.');
         }
@@ -80,10 +105,7 @@ export default function TravelPhrases() {
                 {filteredPhrases.map((phrase) => (
                     <div
                         key={phrase.id}
-                        className={`
-              bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all
-              ${phrase.priority ? 'border-l-4 border-orange-500' : ''}
-            `}
+                        className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all border-l-4 border-orange-500"
                     >
                         <div className="flex items-start gap-3">
                             {/* 즐겨찾기 버튼 */}
