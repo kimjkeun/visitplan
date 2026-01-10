@@ -104,13 +104,25 @@ export default function TravelAssistant() {
                                     : 'bg-white text-gray-800 border-l-4 border-purple-500'
                                 }`}
                         >
-                            <div className="text-sm leading-relaxed prose prose-sm max-w-none">
+                            <div className="text-sm leading-relaxed">
                                 {message.role === 'user' ? (
                                     <p className="whitespace-pre-wrap text-white">{message.parts}</p>
                                 ) : (
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
-                                        className="prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-li:text-gray-800 prose-code:text-purple-600 prose-code:bg-purple-50 prose-code:px-1 prose-code:rounded"
+                                        components={{
+                                            h1: ({ children }) => <h1 className="text-2xl font-bold text-gray-800 mt-4 mb-2">{children}</h1>,
+                                            h2: ({ children }) => <h2 className="text-xl font-bold text-gray-800 mt-3 mb-2">{children}</h2>,
+                                            h3: ({ children }) => <h3 className="text-lg font-bold text-gray-800 mt-2 mb-1">{children}</h3>,
+                                            p: ({ children }) => <p className="text-gray-800 mb-2">{children}</p>,
+                                            strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
+                                            ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+                                            ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+                                            li: ({ children }) => <li className="text-gray-800">{children}</li>,
+                                            code: ({ children }) => <code className="text-purple-600 bg-purple-50 px-1 rounded">{children}</code>,
+                                            pre: ({ children }) => <pre className="bg-gray-100 p-2 rounded mb-2 overflow-x-auto">{children}</pre>,
+                                            a: ({ children, href }) => <a href={href} className="text-purple-600 hover:text-purple-700 underline" target="_blank" rel="noopener noreferrer">{children}</a>,
+                                        }}
                                     >
                                         {message.parts}
                                     </ReactMarkdown>
