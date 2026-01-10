@@ -61,8 +61,31 @@ export default function TravelPhrases() {
         if (chineseVoice) {
             utterance.voice = chineseVoice;
             utterance.lang = chineseVoice.lang;
+            console.log('✅ 중국어 음성 사용:', chineseVoice.name);
         } else {
+            // 중국어 음성이 없을 때 사용자에게 안내
             utterance.lang = 'zh-TW';
+            console.warn('⚠️ 중국어 음성을 찾을 수 없습니다. 기본 음성을 사용합니다.');
+
+            // 첫 재생 시에만 안내 메시지 표시
+            if (!sessionStorage.getItem('tts-warning-shown')) {
+                sessionStorage.setItem('tts-warning-shown', 'true');
+                setTimeout(() => {
+                    if (confirm(
+                        '중국어 음성이 설치되어 있지 않아 정확한 발음이 재생되지 않을 수 있습니다.\n\n' +
+                        '📱 모바일 설정 방법:\n' +
+                        '1. 설정 > 접근성 > 음성 출력\n' +
+                        '2. "음성 데이터 설치" 또는 "TTS 엔진"\n' +
+                        '3. 중국어(번체) 또는 중국어(간체) 다운로드\n\n' +
+                        '그래도 재생하시겠습니까?'
+                    )) {
+                        // 계속 진행
+                    } else {
+                        setPlayingId(null);
+                        return;
+                    }
+                }, 500);
+            }
         }
 
         utterance.rate = 0.8;
@@ -188,6 +211,7 @@ export default function TravelPhrases() {
                     <li>• ▶ 버튼을 눌러 정확한 발음을 들어보세요</li>
                     <li>• "필수" 표시가 있는 표현은 꼭 알아두세요</li>
                     <li>• 오프라인에서도 사용 가능합니다 (음성 제외)</li>
+                    <li className="text-orange-700 font-medium">• 📱 모바일: 중국어 음성 설치 시 더 정확한 발음</li>
                 </ul>
             </div>
 
