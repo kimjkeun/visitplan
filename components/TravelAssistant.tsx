@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { sendMessageToGemini } from '@/lib/gemini';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -102,7 +104,18 @@ export default function TravelAssistant() {
                                     : 'bg-white text-gray-800 border-l-4 border-purple-500'
                                 }`}
                         >
-                            <p className="whitespace-pre-wrap text-sm leading-relaxed">{message.parts}</p>
+                            <div className="text-sm leading-relaxed prose prose-sm max-w-none">
+                                {message.role === 'user' ? (
+                                    <p className="whitespace-pre-wrap text-white">{message.parts}</p>
+                                ) : (
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        className="prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-li:text-gray-800 prose-code:text-purple-600 prose-code:bg-purple-50 prose-code:px-1 prose-code:rounded"
+                                    >
+                                        {message.parts}
+                                    </ReactMarkdown>
+                                )}
+                            </div>
                             <p className={`text-xs mt-2 ${message.role === 'user' ? 'text-purple-100' : 'text-gray-400'}`}>
                                 {new Date(message.timestamp).toLocaleTimeString('ko-KR', {
                                     hour: '2-digit',

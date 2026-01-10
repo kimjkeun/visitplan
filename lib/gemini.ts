@@ -56,7 +56,7 @@ export const sendMessageToGemini = async (message: string, history: Array<{ role
     try {
         const genAI = getGeminiClient();
         const model = genAI.getGenerativeModel({
-            model: 'gemini-3-flash-preview-0125',
+            model: 'gemini-3-flash-preview',
             systemInstruction: getTravelContext()
         });
 
