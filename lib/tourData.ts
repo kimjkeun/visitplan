@@ -36,6 +36,17 @@ export const tourData: DaySchedule[] = [
           lng: 120.6478,
           address: 'Fengjia Rd, Xitun District, Taichung City, Taiwan'
         },
+        placeInfo: {
+          description: '대만 최대 규모의 야시장으로 펑지아대학교 주변에 형성된 거대한 먹거리 천국입니다. 400개 이상의 노점상이 모여있으며, 현지인과 관광객 모두에게 인기가 많습니다.',
+          highlights: [
+            '대만 전통 간식과 현대식 퓨전 음식이 공존',
+            '저렴한 가격에 다양한 음식 시식 가능',
+            '의류, 액세서리, 게임 등 쇼핑도 즐길 수 있음'
+          ],
+          hours: '매일 17:00 ~ 02:00 (노점마다 상이)',
+          admission: '무료',
+          recommendations: '주말과 공휴일은 매우 혼잡하니 평일 방문 추천. 현금 준비 필수!'
+        },
         mustEat: {
           title: '🍴 필수 먹거리 BEST 5',
           items: [
@@ -91,6 +102,17 @@ export const tourData: DaySchedule[] = [
           lat: 24.1283,
           lng: 120.6154,
           address: 'Lane 56, Chunan Rd, Nantun District, Taichung City, Taiwan'
+        },
+        placeInfo: {
+          description: '재개발로 사라질 뻔한 마을을 황융푸 할아버지가 혼자 벽화로 가득 채워 지켜낸 기적의 마을입니다. 형형색색의 그림과 긍정적인 메시지로 가득한 포토존 천국!',
+          highlights: [
+            '할아버지가 직접 그린 독특한 캐릭터와 동물 그림',
+            '인스타그램 감성 사진 촬영 명소',
+            '작지만 알찬 기념품 가게'
+          ],
+          hours: '매일 08:00 ~ 18:00',
+          admission: '무료 (기부 환영)',
+          recommendations: '아침 일찍 방문하면 사람이 적어 사진 찍기 좋습니다. 운이 좋으면 할아버지를 만날 수도!'
         },
         tips: '시내에서 거리가 꽤 되므로 Uber/택시 추천'
       },

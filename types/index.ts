@@ -15,6 +15,13 @@ export interface TimelineItem {
     lng: number;
     address?: string;
   };
+  placeInfo?: {
+    description?: string;
+    highlights?: string[];
+    hours?: string;
+    admission?: string;
+    recommendations?: string;
+  };
 }
 
 export interface FlightInfo {

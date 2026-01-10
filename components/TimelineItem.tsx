@@ -76,6 +76,70 @@ export default function TimelineItem({ item, dayId, index }: Props) {
         </div>
       )}
 
+      {/* Place Details Section (Guidebook Style) */}
+      {item.placeInfo && (
+        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border-l-4 border-purple-500 p-4 rounded-lg mb-3">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-bold text-purple-800 flex items-center gap-2">
+              <span>📖</span>
+              <span>장소 가이드</span>
+            </h4>
+          </div>
+
+          {/* Description */}
+          {item.placeInfo.description && (
+            <div className="mb-3">
+              <p className="text-gray-700 text-sm leading-relaxed">{item.placeInfo.description}</p>
+            </div>
+          )}
+
+          {/* Highlights */}
+          {item.placeInfo.highlights && item.placeInfo.highlights.length > 0 && (
+            <div className="mb-3">
+              <p className="font-semibold text-purple-700 text-sm mb-1">✨ 주요 볼거리</p>
+              <ul className="space-y-1">
+                {item.placeInfo.highlights.map((highlight, idx) => (
+                  <li key={idx} className="text-gray-700 text-sm flex items-start gap-2">
+                    <span className="text-purple-500 mt-0.5">•</span>
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Operating Hours */}
+          {item.placeInfo.hours && (
+            <div className="mb-2">
+              <p className="text-sm">
+                <span className="font-semibold text-purple-700">🕐 운영시간:</span>
+                <span className="text-gray-700 ml-2">{item.placeInfo.hours}</span>
+              </p>
+            </div>
+          )}
+
+          {/* Admission Fee */}
+          {item.placeInfo.admission && (
+            <div className="mb-2">
+              <p className="text-sm">
+                <span className="font-semibold text-purple-700">💰 입장료:</span>
+                <span className="text-gray-700 ml-2">{item.placeInfo.admission}</span>
+              </p>
+            </div>
+          )}
+
+          {/* Recommendations */}
+          {item.placeInfo.recommendations && (
+            <div className="mt-3 pt-3 border-t border-purple-200">
+              <p className="text-sm text-purple-800">
+                <span className="font-semibold">💡 추천:</span>
+                <span className="ml-2">{item.placeInfo.recommendations}</span>
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Actions */}
       <div className="flex gap-3 mt-4">
         {/* Google Maps Button */}
