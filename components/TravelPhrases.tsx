@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { travelPhrases, categoryNames, categoryIcons, TravelPhrase } from '@/lib/travelPhrases';
 import { useTourStore } from '@/lib/store';
 
@@ -10,60 +10,78 @@ export default function TravelPhrases() {
     const [selectedCategory, setSelectedCategory] = useState<Category>('greeting');
     const { favoritePhrases, toggleFavoritePhrase } = useTourStore();
     const [playingId, setPlayingId] = useState<string | null>(null);
+    const [voicesLoaded, setVoicesLoaded] = useState(false);
 
     const categories = Object.keys(categoryNames) as Category[];
     const filteredPhrases = travelPhrases.filter(p => p.category === selectedCategory);
 
+    // 음성 목록 미리 로드 (모바일 호환성)
+    useEffect(() => {
+        const loadVoices = () => {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                setVoicesLoaded(true);
+                console.log('Voices loaded:', voices.length);
+            }
+        };
+
+        // 초기 로드
+        loadVoices();
+
+        // voiceschanged 이벤트 리스너
+        if (window.speechSynthesis) {
+            window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+            return () => {
+                window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+            };
+        }
+    }, []);
+
     // 음성 재생 함수
     const playAudio = (phrase: TravelPhrase) => {
-        if ('speechSynthesis' in window) {
-            // 현재 재생 중인 것이 있으면 중지
-            window.speechSynthesis.cancel();
-
-            setPlayingId(phrase.id);
-
-            const speak = () => {
-                const utterance = new SpeechSynthesisUtterance(phrase.chinese);
-                utterance.lang = 'zh-TW'; // 대만 중국어
-                utterance.rate = 0.8; // 조금 천천히
-
-                // 중국어 음성 명시적으로 선택 (모바일 호환성)
-                const voices = window.speechSynthesis.getVoices();
-                const chineseVoice = voices.find(voice =>
-                    voice.lang.includes('zh-TW') ||
-                    voice.lang.includes('zh-CN') ||
-                    voice.lang.includes('zh')
-                );
-
-                if (chineseVoice) {
-                    utterance.voice = chineseVoice;
-                    console.log('Using voice:', chineseVoice.name, chineseVoice.lang);
-                } else {
-                    console.warn('No Chinese voice found, using default');
-                }
-
-                utterance.onend = () => {
-                    setPlayingId(null);
-                };
-
-                utterance.onerror = () => {
-                    setPlayingId(null);
-                    alert('음성 재생을 지원하지 않는 브라우저입니다.');
-                };
-
-                window.speechSynthesis.speak(utterance);
-            };
-
-            // 음성 목록이 로드되지 않았을 경우를 대비 (모바일)
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                window.speechSynthesis.addEventListener('voiceschanged', speak, { once: true });
-            } else {
-                speak();
-            }
-        } else {
+        if (!('speechSynthesis' in window)) {
             alert('이 브라우저는 음성 재생을 지원하지 않습니다.');
+            return;
         }
+
+        // 현재 재생 중인 것이 있으면 중지
+        window.speechSynthesis.cancel();
+        setPlayingId(phrase.id);
+
+        const utterance = new SpeechSynthesisUtterance(phrase.chinese);
+
+        // 음성 선택
+        const voices = window.speechSynthesis.getVoices();
+        const chineseVoice = voices.find(voice =>
+            voice.lang === 'zh-TW' ||
+            voice.lang === 'zh-CN' ||
+            voice.lang.startsWith('zh')
+        );
+
+        if (chineseVoice) {
+            utterance.voice = chineseVoice;
+            utterance.lang = chineseVoice.lang;
+        } else {
+            utterance.lang = 'zh-TW';
+        }
+
+        utterance.rate = 0.8;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        utterance.onend = () => {
+            setPlayingId(null);
+        };
+
+        utterance.onerror = (event) => {
+            console.error('Speech error:', event);
+            setPlayingId(null);
+        };
+
+        // 약간의 지연 후 재생 (모바일 안정성)
+        setTimeout(() => {
+            window.speechSynthesis.speak(utterance);
+        }, 100);
     };
 
     const isFavorite = (phraseId: string) => {

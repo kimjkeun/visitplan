@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 export default function TravelInfo() {
+    const [showHotelMap, setShowHotelMap] = useState(false);
+
     return (
         <div className="space-y-6">
             {/* 헤더 */}
@@ -41,25 +45,40 @@ export default function TravelInfo() {
                     <span>🏨</span>
                     숙소 정보
                 </h3>
-                <div className="bg-purple-50 p-5 rounded-lg">
-                    <h4 className="text-lg font-bold text-purple-800 mb-3">인하우스 호텔 그랜드</h4>
-                    <div className="space-y-2 text-sm">
-                        <p className="text-gray-700">
-                            <span className="font-medium text-gray-800">중국어명:</span> 薆悅酒店五權館
+                <div className="space-y-3">
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                        <h4 className="text-lg font-bold text-purple-800 mb-2">인하우스 호텔 그랜드</h4>
+                        <p className="text-sm text-gray-700 mb-1">
+                            <span className="font-medium">중국어명:</span> 薆悅酒店五權館
                         </p>
-                        <p className="text-gray-700">
-                            <span className="font-medium text-gray-800">주소:</span><br />
+                        <p className="text-sm text-gray-700">
+                            <span className="font-medium">주소:</span><br />
                             No. 228號, Wuquan Rd, North District, Taichung City, 대만 40443
                         </p>
-                        <a
-                            href="https://www.google.com/maps/search/?api=1&query=薆悅酒店五權館+No.+228號+Wuquan+Rd+North+District+Taichung+City"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
-                        >
-                            📍 지도에서 보기
-                        </a>
                     </div>
+
+                    <button
+                        onClick={() => setShowHotelMap(!showHotelMap)}
+                        className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium flex items-center justify-center gap-2"
+                    >
+                        <span>📍</span>
+                        <span>{showHotelMap ? '지도 접기' : '지도에서 보기'}</span>
+                    </button>
+
+                    {showHotelMap && (
+                        <div className="mt-3 rounded-lg overflow-hidden shadow-md">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.4089!2d120.6738!3d24.1519!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693d6b6e6b6b6b%3A0x6b6b6b6b6b6b6b6b!2zSW5Ib3VzZSBIb3RlbCBHcmFuZCAo6Jex5oKm6YWS5bqX5LqU5qyK6aSoKQ!5e0!3m2!1sko!2skr!4v1234567890"
+                                width="100%"
+                                height="300"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title="InHouse Hotel Grand Map"
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
 
