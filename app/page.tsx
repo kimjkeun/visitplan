@@ -12,6 +12,7 @@ import FullSchedule from '@/components/FullSchedule';
 import TravelInfo from '@/components/TravelInfo';
 import TravelPhrases from '@/components/TravelPhrases';
 import TravelAssistant from '@/components/TravelAssistant';
+import LiveTranslator from '@/components/LiveTranslator';
 
 export default function Home() {
   const { currentDay, initializeFromStorage } = useTourStore();
@@ -35,6 +36,10 @@ export default function Home() {
 
     if (currentDay === 'ai') {
       return <TravelAssistant />;
+    }
+
+    if (currentDay === 'live') {
+      return <LiveTranslator />;
     }
 
     if (currentDay === 'checklist') {

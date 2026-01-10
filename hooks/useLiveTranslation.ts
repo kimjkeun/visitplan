@@ -9,6 +9,7 @@ export interface LiveTranslationState {
     isRecording: boolean;
     error: string | null;
     volume: number;
+    transcripts: Array<{ role: 'user' | 'model'; text: string }>;
 }
 
 export const useLiveTranslation = () => {
@@ -17,6 +18,7 @@ export const useLiveTranslation = () => {
         isRecording: false,
         error: null,
         volume: 0,
+        transcripts: [],
     });
 
     const wsRef = useRef<WebSocket | null>(null);
@@ -43,7 +45,7 @@ export const useLiveTranslation = () => {
                     setup: {
                         model: MODEL,
                         generation_config: {
-                            response_modalities: ["AUDIO"],
+                            response_modalities: ["AUDIO", "TEXT"],
                             speech_config: {
                                 voice_config: {
                                     prebuilt_voice_config: {
@@ -54,11 +56,9 @@ export const useLiveTranslation = () => {
                         },
                         system_instruction: {
                             parts: [{
-                                text: `You are a helpful real-time translator between Korean and Traditional Chinese (Taiwan). 
-                When you hear Korean, translate it to Chinese instantly. 
-                When you hear Chinese, translate it to Korean instantly.
-                If the user asks a specific question about Taiwan tour, answer it briefly in the translated language.
-                Keep the tone natural and helpful. Do not explain, just translate.`
+                                text: `You are a real-time translator between Korean and Traditional Chinese (Taiwan). 
+                                Translate what you hear instantly.
+                                IMPORTAN: Provide the translated text in the text output as well.`
                             }]
                         }
                     }
@@ -75,11 +75,28 @@ export const useLiveTranslation = () => {
                     data = JSON.parse(event.data);
                 }
 
+                // 오디오 처리
                 if (data.serverContent?.modelTurn?.parts?.[0]?.inlineData) {
                     const audioBase64 = data.serverContent.modelTurn.parts[0].inlineData.data;
                     const audioData = base64ToPCM(audioBase64);
                     enqueueAudio(audioData);
                 }
+
+                // 텍스트 처리 (모델 응답)
+                if (data.serverContent?.modelTurn?.parts) {
+                    for (const part of data.serverContent.modelTurn.parts) {
+                        if (part.text) {
+                            setState(prev => ({
+                                ...prev,
+                                transcripts: [...prev.transcripts, { role: 'model', text: part.text }]
+                            }));
+                        }
+                    }
+                }
+
+                // 사용자 입력 인식 결과 (turnComplete 등에서 확인 가능한 경우도 있으나, Live API는 주로 모델 응답에 집중)
+                // 현재 Live API Preview에서는 User STT를 직접적으로 turn 이벤트로 주는 것이 제한적일 수 있음.
+                // 하지만 serverContent에 텍스트가 포함되면 보여줌.
             };
 
             ws.onerror = (error) => {

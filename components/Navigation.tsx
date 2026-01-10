@@ -27,6 +27,7 @@ const navigationSections = [
       { id: 'ai', label: 'AI 어시스턴트' },
       { id: 'converter', label: '환율' },
       { id: 'checklist', label: '체크리스트' },
+      { id: 'live', label: 'LIVE 통역' },
     ]
   }
 ];

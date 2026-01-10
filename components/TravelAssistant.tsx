@@ -4,8 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { sendMessageToGemini } from '@/lib/gemini';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import LiveTranslator from './LiveTranslator';
-import { FaMicrophone } from 'react-icons/fa';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -23,7 +21,6 @@ export default function TravelAssistant() {
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [showLive, setShowLive] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -94,16 +91,6 @@ export default function TravelAssistant() {
                     <h2 className="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">🤖 AI 여행 어시스턴트</h2>
                     <p className="text-base sm:text-xl opacity-90">타이중 여행에 대해 무엇이든 물어보세요</p>
                 </div>
-                <button
-                    onClick={() => setShowLive(true)}
-                    className="flex flex-col items-center justify-center bg-white/20 hover:bg-white/30 text-white p-2 sm:p-3 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95 shadow-lg group"
-                >
-                    <div className="relative">
-                        <FaMicrophone className="text-xl sm:text-2xl mb-1 group-hover:text-yellow-300 transition-colors" />
-                        <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></div>
-                    </div>
-                    <span className="text-[10px] sm:text-xs font-bold whitespace-nowrap bg-black/20 px-1.5 py-0.5 rounded-full">LIVE 통역</span>
-                </button>
             </div>
 
             {/* 메시지 영역 */}
@@ -216,8 +203,6 @@ export default function TravelAssistant() {
                     ⚠️ AI가 생성한 답변은 참고용입니다.
                 </p>
             </div>
-
-            {showLive && <LiveTranslator onClose={() => setShowLive(false)} />}
         </div>
     );
 }
