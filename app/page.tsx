@@ -11,6 +11,7 @@ import CurrencyConverter from '@/components/CurrencyConverter';
 import FullSchedule from '@/components/FullSchedule';
 import TravelInfo from '@/components/TravelInfo';
 import TravelPhrases from '@/components/TravelPhrases';
+import TravelAssistant from '@/components/TravelAssistant';
 
 export default function Home() {
   const { currentDay, initializeFromStorage } = useTourStore();
@@ -30,6 +31,10 @@ export default function Home() {
 
     if (currentDay === 'phrases') {
       return <TravelPhrases />;
+    }
+
+    if (currentDay === 'ai') {
+      return <TravelAssistant />;
     }
 
     if (currentDay === 'checklist') {

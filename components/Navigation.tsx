@@ -24,6 +24,7 @@ const navigationSections = [
     items: [
       { id: 'info', label: '여행정보' },
       { id: 'phrases', label: '여행회화' },
+      { id: 'ai', label: 'AI 어시스턴트' },
       { id: 'converter', label: '환율' },
       { id: 'checklist', label: '체크리스트' },
     ]
